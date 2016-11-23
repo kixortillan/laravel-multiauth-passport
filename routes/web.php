@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +15,30 @@
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+
+Route::get('/oauth/google', 'Auth\GoogleOAuthController@redirectToGoogleProvider');
+Route::get('/oauth/google/redirect', 'Auth\GoogleOAuthController@handleGoogleProviderCallback');
+
+
+Route::get('/testauth', function(Request $request){
+    $http = new GuzzleHttp\Client([
+        'base_uri' => 'http://local.talaoauth'
+    ]);
+
+    $response = $http->post('/oauth/token', [
+        'form_params' => [
+            'grant_type' => 'authorization_code',
+            'client_id' => '4',
+            'client_secret' => 'N6gaHuVDkPyMVBWMtsATFCHQz7hJb1iQlY0KF06V',
+            'redirect_uri' => 'http://localhost:8000/testauth',
+            'code' => $request->query('code'),
+        ],
+    ]);
+
+    return json_decode((string) $response->getBody(), true);
 });
