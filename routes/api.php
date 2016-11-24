@@ -17,4 +17,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
-Route::get('/info', 'Auth\OAuthController@info')->middleware('token.info');
+Route::get('/info', 'Auth\OAuthController@info');

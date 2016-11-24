@@ -2,7 +2,7 @@
 
 namespace App\Lib\Verifier\Validator;
 
-interface InterfaceTokenValidator
+interface TokenValidatorInterface
 {
 
     /**

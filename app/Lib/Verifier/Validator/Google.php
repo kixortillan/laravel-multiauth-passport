@@ -2,10 +2,10 @@
 
 namespace App\Lib\Verifier\Validator;
 
-use Socialite;
 use App\Repositories\UserRepository;
+use Laravel\Socialite\Two\AbstractProvider;
 
-class Google implements InterfaceTokenValidator
+class Google implements TokenValidatorInterface
 {
 
     /**
@@ -20,15 +20,22 @@ class Google implements InterfaceTokenValidator
      */
     protected $token;
 
-    public function __construct(UserRepository $repo, $token)
+    /**
+     *
+     * @var type 
+     */
+    protected $socialite;
+
+    public function __construct(AbstractProvider $socialite, UserRepository $repo, $token)
     {
         $this->repo = $repo;
-        $this->token = str_replace('Bearer', '', $token);
+        $this->token = $token;
+        $this->socialite = $socialite;
     }
 
     public function validate()
     {
-        $googleUser = Socialite::driver('google')->userFromToken($this->token);
+        $googleUser = $this->socialite->userFromToken($this->token);
 
         $user = $this->repo->findByEmail($googleUser->email);
 
@@ -38,42 +45,6 @@ class Google implements InterfaceTokenValidator
         }
 
         return false;
-        /* $query = [
-          'fields' => 'emailAddress',
-          ];
-
-          $opts = [
-          'headers' => [
-          'Authorization' => sprintf('Bearer %s', $this->token),
-          ]
-          ];
-
-          try
-          {
-          $url = $this->path . "?" . http_build_query($query);
-          $response = $this->http->get($url, $opts);
-          }
-          catch (Exception $ex)
-          {
-          dd($ex->getMessage());
-          return false;
-          }
-
-          $statusCode = $response->getStatusCode();
-
-          if ($statusCode != \Illuminate\Http\Response::HTTP_OK)
-          {
-          return false;
-          }
-
-          $json = json_decode($response->getBody());
-
-          if (isset($json->error_description))
-          {
-          return false;
-          }
-
-          return with(new GoogleToken())->user(); */
     }
 
 }

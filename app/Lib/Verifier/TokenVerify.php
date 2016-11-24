@@ -3,11 +3,11 @@
 namespace App\Lib\Verifier;
 
 use Exception;
-use App\Lib\Verifier\InterfaceVerifier;
+use App\Lib\Verifier\VerifierInterface;
 use App\Lib\Verifier\Exception\OAuthException;
-use App\Lib\Verifier\Validator\InterfaceTokenValidator;
+use App\Lib\Verifier\Validator\TokenValidatorInterface;
 
-class TokenVerify implements InterfaceVerifier
+class TokenVerify implements VerifierInterface
 {
 
     /**
@@ -49,10 +49,10 @@ class TokenVerify implements InterfaceVerifier
 
     /**
      * 
-     * @param InterfaceTokenValidator $validator
+     * @param TokenValidatorInterface $validator
      * @return $this
      */
-    public function setValidator(InterfaceTokenValidator $validator)
+    public function setValidator(TokenValidatorInterface $validator)
     {
         $this->validator = $validator;
 

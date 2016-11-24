@@ -4,14 +4,12 @@ namespace App\Lib\Verifier\Validator;
 
 use Laravel\Passport\TokenRepository;
 
-class Internal implements InterfaceTokenValidator
+class Internal implements TokenValidatorInterface
 {
-
-    protected $user;
 
     public function __construct()
     {
-        $this->user = auth('api')->user();
+        
     }
 
     /**
@@ -20,12 +18,12 @@ class Internal implements InterfaceTokenValidator
      */
     public function validate()
     {
-        if ($this->user)
+        if (!auth('api')->check())
         {
-            return $this->user;
+            return false;
         }
 
-        return false;
+        return auth('api')->user();
     }
 
 }

@@ -5,9 +5,9 @@ namespace App\Lib\Verifier;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use App\Lib\Verifier\InterfaceVerifier;
+use App\Lib\Verifier\VerifierInterface;
 
-class TokenVerify_1 implements InterfaceVerifier
+class TokenVerify_1 implements VerifierInterface
 {
 
     /**

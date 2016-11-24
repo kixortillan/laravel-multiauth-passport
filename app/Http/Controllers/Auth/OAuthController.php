@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Lib\Verifier\Validator\Google;
 use App\Lib\Verifier\Validator\Internal;
-use App\Lib\Verifier\InterfaceVerifier;
+use App\Lib\Verifier\VerifierInterface;
 
 class OAuthController
 {
@@ -17,7 +17,7 @@ class OAuthController
      *
      * @var type 
      */
-    protected $verifier;
+    protected $service;
 
     /**
      *
@@ -27,9 +27,9 @@ class OAuthController
 
     /**
      * 
-     * @param InterfaceVerifier $verifier
+     * @param VerifierInterface $verifier
      */
-    public function __construct(InterfaceVerifier $verifier)
+    public function __construct(VerifierInterface $verifier)
     {
         $this->verifier = $verifier;
     }
