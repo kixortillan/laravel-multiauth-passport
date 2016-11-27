@@ -2,8 +2,8 @@
 
 namespace App\Lib\Verifier\Validator;
 
+use Laravel\Socialite\Contracts\Provider;
 use App\Repositories\UserRepository;
-use Laravel\Socialite\Two\AbstractProvider;
 
 class Google implements TokenValidatorInterface
 {
@@ -26,16 +26,16 @@ class Google implements TokenValidatorInterface
      */
     protected $socialite;
 
-    public function __construct(AbstractProvider $socialite, UserRepository $repo, $token)
+    public function __construct(Provider $socialite, UserRepository $repo, $token)
     {
+        $this->socialite = $socialite;
         $this->repo = $repo;
         $this->token = $token;
-        $this->socialite = $socialite;
     }
 
     public function validate()
     {
-        $googleUser = $this->socialite->userFromToken($this->token);
+        $googleUser = $this->socialite->driver('google')->userFromToken($this->token);
 
         $user = $this->repo->findByEmail($googleUser->email);
 
