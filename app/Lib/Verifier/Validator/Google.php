@@ -2,6 +2,7 @@
 
 namespace App\Lib\Verifier\Validator;
 
+use GuzzleHttp\Exception\RequestException;
 use Laravel\Socialite\Contracts\Provider;
 use App\Repositories\UserRepository;
 
@@ -35,7 +36,19 @@ class Google implements TokenValidatorInterface
 
     public function validate()
     {
-        $googleUser = $this->socialite->driver('google')->userFromToken($this->token);
+        try
+        {
+            $googleUser = $this->socialite->driver('google')->userFromToken($this->token);
+        }
+        catch (RequestException $ex)
+        {
+            return false;
+        }
+
+        if ($googleUser == null || !is_object($googleUser))
+        {
+            return false;
+        }
 
         $user = $this->repo->findByEmail($googleUser->email);
 

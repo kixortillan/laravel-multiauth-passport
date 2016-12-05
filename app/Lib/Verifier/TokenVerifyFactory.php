@@ -38,7 +38,7 @@ class TokenVerifyFactory
                 break;
             case 'INTERNAL':
             default :
-                $this->verifier->setValidator(new Internal());
+                $this->verifier->setValidator(new Internal(auth()));
                 break;
         }
 

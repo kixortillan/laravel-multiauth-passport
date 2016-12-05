@@ -2,14 +2,24 @@
 
 namespace App\Lib\Verifier\Validator;
 
-use Laravel\Passport\TokenRepository;
+use Illuminate\Contracts\Auth\Guard;
 
 class Internal implements TokenValidatorInterface
 {
 
-    public function __construct()
+    /**
+     *
+     * @var type 
+     */
+    protected $guard;
+
+    /**
+     * 
+     * @param Guard $guard
+     */
+    public function __construct(Guard $guard)
     {
-        
+        $this->guard = $guard;
     }
 
     /**
@@ -18,12 +28,12 @@ class Internal implements TokenValidatorInterface
      */
     public function validate()
     {
-        if (!auth('api')->check())
+        if (!$this->guard->check())
         {
             return false;
         }
 
-        return auth('api')->user();
+        return $this->guard->user();
     }
 
 }
