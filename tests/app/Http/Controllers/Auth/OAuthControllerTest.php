@@ -10,13 +10,14 @@ class OAuthControllerTest extends TestCase
     public function testInfoReturnGoogleUserInfo()
     {
         //Authenticate via Google
-        $result = $this->visit(url('oauth/google'));
         
-        dd($result);
-        
-//        $this->get(url('api/info'), [
-//            'Authorization' => 'Bearer InvalidToken'
-//        ]);
+        $this->get(url('api/info'), [
+            'OAuthSource' => 'Google',
+            'Authorization' => 'Bearer InvalidToken'
+        ])->seeJson([
+            'email',
+            'token'
+        ]);
     }
 
     public function testInfoInvalidGoogleToken()

@@ -42,6 +42,11 @@ class AuthService implements AuthServiceInterface
         $this->source = strtoupper($request->header('OAuth-Source', null));
         $this->token = preg_replace('\^BEARER', '', $request->header('Authorization', null));
 
+        if (empty($this->source) || empty($this->token))
+        {
+            throw new Exception("Invalid request");
+        }
+
         try
         {
             return $this->factory->getVerifier($this->source, $this->token)->verify();
