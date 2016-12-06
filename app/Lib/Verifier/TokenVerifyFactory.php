@@ -2,7 +2,6 @@
 
 namespace App\Lib\Verifier;
 
-use App\Lib\Verifier\VerifierInterface;
 use App\Lib\Verifier\Validator\Google;
 use App\Lib\Verifier\Validator\Internal;
 
@@ -15,13 +14,9 @@ class TokenVerifyFactory
      */
     protected $verifier;
 
-    /**
-     * 
-     * @param VerifierInterface $verifier
-     */
-    public function __construct(VerifierInterface $verifier)
+    public function __construct()
     {
-        $this->verifier = $verifier;
+        $this->verifier = new TokenVerify();
     }
 
     /**
