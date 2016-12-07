@@ -2,8 +2,10 @@
 
 namespace App\Lib\Verifier;
 
+use Socialite;
 use App\Lib\Verifier\Validator\Google;
 use App\Lib\Verifier\Validator\Internal;
+use App\Repositories\UserRepository;
 
 class TokenVerifyFactory
 {
@@ -29,11 +31,11 @@ class TokenVerifyFactory
         switch ($source)
         {
             case 'GOOGLE':
-                $this->verifier->setValidator(new Google($token));
+                $this->verifier->setValidator(new Google(Socialite::with('google'), new UserRepository(), $token));
                 break;
             case 'INTERNAL':
             default :
-                $this->verifier->setValidator(new Internal(auth()));
+                $this->verifier->setValidator(new Internal(auth('api')));
                 break;
         }
 

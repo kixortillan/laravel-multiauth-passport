@@ -7,24 +7,20 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class OAuthControllerTest extends TestCase
 {
 
-    public function testInfoReturnGoogleUserInfo()
+    public function testInfoGoogleReturnsHttp401()
     {
-        //Authenticate via Google
-        
         $this->get(url('api/info'), [
-            'OAuthSource' => 'Google',
+            'OAuth-Source' => 'Google',
             'Authorization' => 'Bearer InvalidToken'
-        ])->seeJson([
-            'email',
-            'token'
-        ]);
+        ])->assertResponseStatus(\Illuminate\Http\Response::HTTP_UNAUTHORIZED);
     }
 
-    public function testInfoInvalidGoogleToken()
+    public function testInfoInternalReturnsHttp401()
     {
         $this->get(url('api/info'), [
+            'OAuth-Source' => 'Internal',
             'Authorization' => 'Bearer InvalidToken'
-        ]);
+        ])->assertResponseStatus(\Illuminate\Http\Response::HTTP_UNAUTHORIZED);
     }
 
 }

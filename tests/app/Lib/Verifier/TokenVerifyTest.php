@@ -45,7 +45,7 @@ class TokenVerifyTest extends TestCase
 
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
-        $mockSocialite->shouldReceive('driver->userFromToken')
+        $mockSocialite->shouldReceive('userFromToken')
                 ->with('some token')
                 ->once()
                 ->andReturn($mockGoogleUser);
@@ -80,7 +80,7 @@ class TokenVerifyTest extends TestCase
 
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
-        $mockSocialite->shouldReceive('driver->userFromToken')
+        $mockSocialite->shouldReceive('userFromToken')
                 ->with('some token')
                 ->once()
                 ->andThrow(new GuzzleHttp\Exception\ClientException('Error', new \GuzzleHttp\Psr7\Request('GET', '')));
@@ -110,7 +110,7 @@ class TokenVerifyTest extends TestCase
 
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
-        $mockSocialite->shouldReceive('driver->userFromToken')
+        $mockSocialite->shouldReceive('userFromToken')
                 ->with('some token')
                 ->once()
                 ->andThrow(new GuzzleHttp\Exception\ServerException('Error', new \GuzzleHttp\Psr7\Request('GET', '')));
@@ -129,7 +129,7 @@ class TokenVerifyTest extends TestCase
 
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
-        $mockSocialite->shouldReceive('driver->userFromToken')
+        $mockSocialite->shouldReceive('userFromToken')
                 ->with('some token')
                 ->once()
                 ->andThrow(new GuzzleHttp\Exception\RequestException("Not Found", new \GuzzleHttp\Psr7\Request('GET', '')));
@@ -148,7 +148,7 @@ class TokenVerifyTest extends TestCase
 
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
-        $mockSocialite->shouldReceive('driver->userFromToken')
+        $mockSocialite->shouldReceive('userFromToken')
                 ->with('some token')
                 ->once()
                 ->andReturnNull();

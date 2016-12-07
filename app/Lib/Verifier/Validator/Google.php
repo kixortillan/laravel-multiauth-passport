@@ -38,7 +38,7 @@ class Google implements TokenValidatorInterface
     {
         try
         {
-            $googleUser = $this->socialite->driver('google')->userFromToken($this->token);
+            $googleUser = $this->socialite->userFromToken($this->token);
         }
         catch (RequestException $ex)
         {

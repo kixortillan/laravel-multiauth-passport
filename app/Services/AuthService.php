@@ -37,10 +37,16 @@ class AuthService implements AuthServiceInterface
         $this->factory = $factory;
     }
 
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     * @throws Exception
+     */
     public function infoFromToken(Request $request)
     {
         $this->source = strtoupper($request->header('OAuth-Source', null));
-        $this->token = preg_replace('\^BEARER', '', $request->header('Authorization', null));
+        $this->token = $this->extractBearerTokenFromHeader($request->header('Authorization', null));
 
         if (empty($this->source) || empty($this->token))
         {
@@ -55,6 +61,16 @@ class AuthService implements AuthServiceInterface
         {
             throw $ex;
         }
+    }
+
+    /**
+     * 
+     * @param type $val
+     * @return type
+     */
+    private function extractBearerTokenFromHeader($val)
+    {
+        return trim(preg_replace('/^BEARER/', ' ', $val));
     }
 
 }
