@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use RuntimeException;
 use Illuminate\Http\Request;
 use App\Lib\Verifier\TokenVerifyFactory;
 use App\Services\Contracts\AuthServiceInterface;
@@ -50,7 +51,7 @@ class AuthService implements AuthServiceInterface
 
         if (empty($this->source) || empty($this->token))
         {
-            throw new Exception("Invalid request");
+            throw new RuntimeException("Invalid request");
         }
 
         try
