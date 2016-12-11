@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use Socialite;
+use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
 
-class GoogleOAuthController
+class SocialiteAuthController
 {
 
     /**
@@ -20,23 +21,23 @@ class GoogleOAuthController
     }
 
     /**
-     * Redirect the user to the Google authentication page.
+     * Redirect the user to the Third party authentication page.
      *
      * @return Response
      */
-    public function redirectToGoogleProvider()
+    public function redirectToProvider(Request $request, $provider)
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
     /**
-     * Obtain the user information from Google.
+     * Obtain the user information from Third party.
      *
      * @return Response
      */
-    public function handleGoogleProviderCallback()
+    public function handleProviderCallback(Request $request, $provider)
     {
-        $response = Socialite::driver('google')->user();
+        $response = Socialite::driver($provider)->user();
 
         $user = $this->repo->findByEmail($response->email);
 

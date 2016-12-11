@@ -21,9 +21,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/oauth/google', 'Auth\GoogleOAuthController@redirectToGoogleProvider');
-Route::get('/oauth/google/redirect', 'Auth\GoogleOAuthController@handleGoogleProviderCallback');
-
+Route::get('/oauth/{provider}', 'Auth\SocialiteAuthController@redirectToProvider');
+Route::get('/oauth/{provider}/redirect', 'Auth\SocialiteAuthController@handleProviderCallback');
 
 Route::get('/testauth', function(Request $request){
     $http = new GuzzleHttp\Client([
