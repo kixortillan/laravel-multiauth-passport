@@ -47,4 +47,10 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT_URL', 'http://localhost/redirect'),
     ],
     
+    'twitter' => [
+        'client_id' => env('TWITTER_CLIENT_ID', 'my_client_id'),
+        'client_secret' => env('TWITTER_CLIENT_SECRET', 'my_client_secret'),
+        'redirect' => env('TWITTER_REDIRECT_URL', 'http://localhost/redirect'),
+    ],
+    
 ];

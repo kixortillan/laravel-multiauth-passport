@@ -18,11 +18,9 @@ class TokenVerifyTest extends TestCase
 
     public function testUnknownValidator()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mock = $this->createMock(\App\Lib\Verifier\Validator\TokenValidatorInterface::class);
 
-        $this->obj->setValidator($mock);
+        $this->obj = new \App\Lib\Verifier\TokenVerify($mock);
 
         $this->expectException(Exception::class);
         $this->obj->verify();
@@ -30,8 +28,6 @@ class TokenVerifyTest extends TestCase
 
     public function testVerifySuccessGoogle()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockGoogleUser = Mockery::mock(Laravel\Socialite\Two\User::class);
 
         $mockGoogleUser->shouldReceive('getId')
@@ -58,15 +54,13 @@ class TokenVerifyTest extends TestCase
                 ->once()
                 ->andReturn($mockUser);
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Google($mockSocialite, $mockRepo, 'some token'));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\SocialiteValidator($mockSocialite, $mockRepo, 'some token'));
 
         $this->assertInstanceOf(App\User::class, $this->obj->verify());
     }
 
     public function testVerifyFailGoogle400()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockGoogleUser = Mockery::mock(Laravel\Socialite\Two\User::class);
 
         $mockGoogleUser->shouldReceive('getId')
@@ -87,7 +81,7 @@ class TokenVerifyTest extends TestCase
 
         $mockRepo = Mockery::mock(\App\Repositories\UserRepository::class);
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Google($mockSocialite, $mockRepo, 'some token'));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\SocialiteValidator($mockSocialite, $mockRepo, 'some token'));
 
         $this->expectException(App\Lib\Verifier\Exception\OAuthException::class);
         $this->obj->verify();
@@ -95,8 +89,6 @@ class TokenVerifyTest extends TestCase
 
     public function testVerifyFailGoogle500()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockGoogleUser = Mockery::mock(Laravel\Socialite\Two\User::class);
 
         $mockGoogleUser->shouldReceive('getId')
@@ -117,7 +109,7 @@ class TokenVerifyTest extends TestCase
 
         $mockRepo = Mockery::mock(\App\Repositories\UserRepository::class);
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Google($mockSocialite, $mockRepo, 'some token'));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\SocialiteValidator($mockSocialite, $mockRepo, 'some token'));
 
         $this->expectException(App\Lib\Verifier\Exception\OAuthException::class);
         $this->obj->verify();
@@ -125,8 +117,6 @@ class TokenVerifyTest extends TestCase
 
     public function testVerifyFailGoogleWithException()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
         $mockSocialite->shouldReceive('userFromToken')
@@ -136,7 +126,7 @@ class TokenVerifyTest extends TestCase
 
         $mockRepo = Mockery::mock(\App\Repositories\UserRepository::class);
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Google($mockSocialite, $mockRepo, 'some token'));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\SocialiteValidator($mockSocialite, $mockRepo, 'some token'));
 
         $this->expectException(\App\Lib\Verifier\Exception\OAuthException::class);
         $this->obj->verify();
@@ -144,8 +134,6 @@ class TokenVerifyTest extends TestCase
 
     public function testVerifyNullGoogleUser()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockSocialite = Mockery::mock(Laravel\Socialite\Two\GoogleProvider::class);
 
         $mockSocialite->shouldReceive('userFromToken')
@@ -155,7 +143,7 @@ class TokenVerifyTest extends TestCase
 
         $mockRepo = Mockery::mock(\App\Repositories\UserRepository::class);
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Google($mockSocialite, $mockRepo, 'some token'));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\SocialiteValidator($mockSocialite, $mockRepo, 'some token'));
 
         $this->expectException(\App\Lib\Verifier\Exception\OAuthException::class);
         $this->obj->verify();
@@ -163,8 +151,6 @@ class TokenVerifyTest extends TestCase
 
     public function testVerifySuccessInternal()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockUser = Mockery::mock('App\User');
 
         $mockGuard = Mockery::mock(Illuminate\Contracts\Auth\Guard::class);
@@ -177,15 +163,13 @@ class TokenVerifyTest extends TestCase
                 ->once()
                 ->andReturn($mockUser);
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Internal($mockGuard));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\Internal($mockGuard));
 
         $this->assertInstanceOf(App\User::class, $this->obj->verify());
     }
 
     public function testVerifyInternalCheckReturnFalse()
     {
-        $this->obj = new App\Lib\Verifier\TokenVerify();
-
         $mockUser = Mockery::mock('App\User');
 
         $mockGuard = Mockery::mock(Illuminate\Contracts\Auth\Guard::class);
@@ -197,7 +181,7 @@ class TokenVerifyTest extends TestCase
         $mockGuard->shouldReceive('user')
                 ->never();
 
-        $this->obj->setValidator(new App\Lib\Verifier\Validator\Internal($mockGuard));
+        $this->obj = new \App\Lib\Verifier\TokenVerify(new App\Lib\Verifier\Validator\Internal($mockGuard));
 
         $this->expectException(\App\Lib\Verifier\Exception\OAuthException::class);
         $this->obj->verify();

@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\RequestException;
 use Laravel\Socialite\Contracts\Provider;
 use App\Repositories\UserRepository;
 
-class Google implements TokenValidatorInterface
+class SocialiteValidator implements TokenValidatorInterface
 {
 
     /**
@@ -38,19 +38,19 @@ class Google implements TokenValidatorInterface
     {
         try
         {
-            $googleUser = $this->socialite->userFromToken($this->token);
+            $userInfo = $this->socialite->userFromToken($this->token);
         }
         catch (RequestException $ex)
         {
             return false;
         }
 
-        if ($googleUser == null || !is_object($googleUser))
+        if ($userInfo == null || !is_object($userInfo))
         {
             return false;
         }
 
-        $user = $this->repo->findByEmail($googleUser->email);
+        $user = $this->repo->findByEmail($userInfo->email);
 
         if ($user)
         {

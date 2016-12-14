@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Socialite;
+use RuntimeException;
 use Illuminate\Http\Request;
 use App\Repositories\UserRepository;
 
@@ -15,9 +16,17 @@ class SocialiteAuthController
      */
     protected $repo;
 
-    public function __construct(UserRepository $repo)
+    /**
+     *
+     * @var type 
+     * 
+     */
+    protected $parser;
+
+    public function __construct(UserRepository $repo, \App\Lib\Parser $parser)
     {
         $this->repo = $repo;
+        $this->parser = $parser;
     }
 
     /**
@@ -39,13 +48,20 @@ class SocialiteAuthController
     {
         $response = Socialite::driver($provider)->user();
 
-        $user = $this->repo->findByEmail($response->email);
+        $userInfo = $this->parser->search(['email', 'name'], $response);
+        
+        if(empty($userInfo['email']))
+        {
+            throw new RuntimeException('Third party authentication server did not reply with your email.');
+        }
+
+        $user = $this->repo->findByEmail($userInfo['email']);
 
         if (!$user)
         {
             $user = $this->repo->createUser([
-                'email' => $response->email,
-                'name' => $response->name,
+                'email' => $userInfo['email'],
+                'name' => !empty($userInfo['name']) ? $userInfo['name'] : null,
             ]);
         }
 

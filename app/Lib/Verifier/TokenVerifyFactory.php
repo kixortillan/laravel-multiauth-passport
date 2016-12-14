@@ -3,43 +3,36 @@
 namespace App\Lib\Verifier;
 
 use Socialite;
-use App\Lib\Verifier\Validator\Google;
+use App\Lib\Verifier\Validator\SocialiteValidator;
 use App\Lib\Verifier\Validator\Internal;
 use App\Repositories\UserRepository;
 
 class TokenVerifyFactory
 {
 
-    /**
-     *
-     * @var type 
-     */
-    protected $verifier;
-
     public function __construct()
     {
-        $this->verifier = new TokenVerify();
+        
     }
 
     /**
      * 
-     * @param type $source
+     * @param type $provider
      * @param type $token
      */
-    public function getVerifier($source, $token = null)
+    public function getVerifier($provider, $token = null)
     {
-        switch ($source)
+        $provider = strtolower($provider);
+        
+        switch ($provider)
         {
-            case 'GOOGLE':
-                $this->verifier->setValidator(new Google(Socialite::with('google'), new UserRepository(), $token));
-                break;
-            case 'INTERNAL':
+            case 'facebook':
+            case 'google':
+                return new TokenVerify(new SocialiteValidator(Socialite::with($provider), new UserRepository(), $token));
+            case 'internal':
             default :
-                $this->verifier->setValidator(new Internal(auth('api')));
-                break;
+                return new TokenVerify(new Internal(auth('api')));
         }
-
-        return $this->verifier;
     }
 
 }

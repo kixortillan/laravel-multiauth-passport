@@ -27,7 +27,7 @@ class AuthService implements AuthServiceInterface
      *
      * @var type 
      */
-    protected $source;
+    protected $provider;
 
     /**
      * 
@@ -46,17 +46,17 @@ class AuthService implements AuthServiceInterface
      */
     public function infoFromToken(Request $request)
     {
-        $this->source = strtoupper($request->header('OAuth-Source', null));
+        $this->provider = strtolower($request->query('provider', null));
         $this->token = $this->extractBearerTokenFromHeader($request->header('Authorization', null));
 
-        if (empty($this->source) || empty($this->token))
+        if (empty($this->provider) || empty($this->token))
         {
             throw new RuntimeException("Invalid request");
         }
 
         try
         {
-            return $this->factory->getVerifier($this->source, $this->token)->verify();
+            return $this->factory->getVerifier($this->provider, $this->token)->verify();
         }
         catch (Exception $ex)
         {
@@ -71,7 +71,7 @@ class AuthService implements AuthServiceInterface
      */
     private function extractBearerTokenFromHeader($val)
     {
-        return trim(preg_replace('/^BEARER/', ' ', $val));
+        return trim(preg_replace('/^Bearer/', ' ', $val));
     }
 
 }

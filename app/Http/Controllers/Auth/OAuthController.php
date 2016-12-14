@@ -37,7 +37,7 @@ class OAuthController
         try
         {
             $user = $this->service->infoFromToken($request);
-
+            
             return response()->json($user);
         }
         catch (Exception $ex)

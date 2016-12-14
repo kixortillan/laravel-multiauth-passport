@@ -11,27 +11,9 @@ class TokenVerify implements VerifierInterface
 {
 
     /**
-     * Header value to look for source
-     * 
-     */
-    const HEADER_OAUTH_SOURCE = 'OAuth-Source';
-
-    /**
      * Header value to look for token
      */
     const HEADER_AUTHORIZATION = 'Authorization';
-
-    /**
-     * Google source of token
-     * 
-     */
-    const GOOGLE_AUTH_SOURCE = 'GOOGLE';
-
-    /**
-     * Google source of token
-     * 
-     */
-    const INTERNAL_AUTH_SOURCE = 'INTERNAL';
 
     /**
      *
@@ -42,9 +24,9 @@ class TokenVerify implements VerifierInterface
     /**
      * 
      */
-    public function __construct()
+    public function __construct(TokenValidatorInterface $validator)
     {
-        
+        $this->validator = $validator;
     }
 
     /**

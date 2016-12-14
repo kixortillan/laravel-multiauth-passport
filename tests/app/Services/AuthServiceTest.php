@@ -18,9 +18,9 @@ class AuthServiceTest extends TestCase
     public function testInfoEmptyHeader()
     {
         $mockRequest = Mockery::mock(\Illuminate\Http\Request::class);
-        $mockRequest->shouldReceive('header')
+        $mockRequest->shouldReceive('query')
                 ->once()
-                ->with('OAuth-Source', null)
+                ->with('provider', null)
                 ->andReturnNull();
 
         $mockRequest->shouldReceive('header')
