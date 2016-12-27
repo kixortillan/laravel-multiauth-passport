@@ -41,3 +41,5 @@ Route::get('/testauth', function(Request $request){
 
     return json_decode((string) $response->getBody(), true);
 });
+
+Route::get('/register/verify', 'Auth\RegisterController@verify');

@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'cookie' => 'laravel_session',
+    'cookie' => 'laravel_multi_auth_session',
 
     /*
     |--------------------------------------------------------------------------
